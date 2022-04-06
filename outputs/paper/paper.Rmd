@@ -1,12 +1,11 @@
 ---
-title: "My title"
-subtitle: "My subtitle if needed"
+title: "What tells you that you have a heart disease?"
+subtitle: "An analysis of Heart Disease indicators"
 author: 
-  - First author
-  - Another author
-thanks: "Code and data are available at: LINK."
+  - Puyu Liu (1005092971)
+thanks: "Code and data are available at: https://github.com/liupuyu2/Puyu-Liu."
 date: "`r format(Sys.time(), '%d %B %Y')`"
-abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
+abstract: "This paper analyzed the data of personal key indicators of heart disease. The result indicates that age, sex, BMI, etc are correlated to having a heart disease.  Based on the analysis, this paper consists of a linear regression analysis, with the use of the programming language R. Keywords: Heart Diseases, Physical health, Mental Health, kaggle, age & sex, stroke, Smoking, Alcohol Drinking"
 output:
   bookdown::pdf_document2
 toc: FALSE
@@ -22,55 +21,19 @@ library(palmerpenguins)
 
 # Introduction
 
-You can and should cross-reference sections and sub-sections. For instance, Section \@ref(data). R Markdown automatically makes the sections lower case and adds a dash to spaces to generate labels, for instance, Section \@ref(first-discussion-point). 
+As heart diseases have caused most deaths for people in the US, this dataset include about 20 variables that involve several risk factors of heart disease. Around half of all americans have at least one heart disease indicator: blood pressure, high cholesterol, smoking, alcohol drinking, diabete and obesity (high BMI), physical and mental health. Hopefully we can derive a regression analysis to use the logistic regression model to make future predictions for population with heart disease risk factors. Computational developments have a great effect on detecting the early stage of some typical heart diseases.
+
+The paper starts with an overview of the data with 300 thousands observations. And also, we will look into the correlation of every variable then try to conduct a regression analysis. Before that, the dataset should be properly cleaned and outliers and leverage should be well taken care of. After processing the data, we will be using the ANOVA test to determine our variables in our model.
 
 
 
 # Data
 
-Our data is of penguins (Figure \@ref(fig:bills)).
-
-```{r bills, fig.cap="Bills of penguins", echo = FALSE}
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = FALSE) +
-  theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
-```
-
-Talk more about it.
-
-Also bills and their average (Figure \@ref(fig:billssssss)). (Notice how you can change the height and width so they don't take the whole page?)
-
-```{r billssssss, fig.cap="More bills of penguins", echo = FALSE, fig.width=8, fig.height=4}
-
-# This needs to be about the random data tha tI sasmpled?
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = FALSE) +
-  theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
-```
-
-Talk way more about it. 
-
 
 
 # Model
 
-\begin{equation}
-Pr(\theta | y) = \frac{Pr(y | \theta) Pr(\theta)}{Pr(y)}  (\#eq:bayes)
-\end{equation}
 
-Equation \@ref(eq:bayes) seems useful, eh?
-
-Here's a dumb example of how to use some references: In paper we run our analysis in `R` [@citeR]. We also use the `tidyverse` which was written by @thereferencecanbewhatever If we were interested in baseball data then @citeLahman could be useful. 
-
-We can use maths by including latex between dollar signs, for instance $\theta$.
 
 
 # Results
@@ -79,7 +42,6 @@ We can use maths by including latex between dollar signs, for instance $\theta$.
 
 ## First discussion point
 
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
 
 ## Second discussion point
 
@@ -87,7 +49,7 @@ If my paper were 10 pages, then should be be at least 2.5 pages. The discussion 
 
 ## Weaknesses and next steps
 
-Weaknesses and next steps should also be included.
+
 
 \newpage
 
