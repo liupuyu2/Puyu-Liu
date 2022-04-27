@@ -16,7 +16,10 @@ bibliography: references.bib
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
-library(palmerpenguins)
+library(readxl)
+library(knitr)
+library(janitor)
+library(dplyr)
 ```
 
 # Introduction
@@ -28,15 +31,69 @@ The paper starts with an overview of the data with 300 thousands observations. A
 
 
 # Data
+In this paper we discuss the key indicators of heart disease from BMI, smoking, and other categorical variables. The data set that we used is provided by the CDC whom surveyed by telephone to gather data from residents across the US and I retrieved the organized data set from the Kaggle website. The dataset that we used surveys 400,000 adults whom are asked a series of questions related to their health status, for example "Have you smoked more than 100 cigarettes in your life?" etc. Many variables were documented by the CDC but only relevant variables related to increasing a risk of heart disease were used and cleaned up within our data set. After cleaning, only roughly 320,000 observations were noted and had relevancy towards directly or indirectly influencing heart disease. 
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Read the data
+dat <- read_csv("/cloud/project/inputs/data/heart_2020_cleaned.csv")
+```
+
+```{r}
+summary(dat)
+```
+
+```{r}
+dat=dat %>%
+  mutate(y = ifelse(HeartDisease == "No",0,1))
+dat=dat %>%
+  mutate(smoke = ifelse(Smoking == "No",0,1))
+dat=dat %>%
+  mutate(drink = ifelse(AlcoholDrinking == "No",0,1))
+dat=dat %>%
+  mutate(stro = ifelse(Stroke == "No",0,1))
+dat=dat %>%
+  mutate(dif = ifelse(DiffWalking == "No",0,1))
+dat=dat %>%
+  mutate(smoke = ifelse(Smoking == "No",0,1))
+dat=dat %>%
+  mutate(physic = ifelse(PhysicalActivity == "No",0,1))
+dat=dat %>%
+  mutate(smoke = ifelse(Smoking == "No",0,1))
+```
 
 
 
 # Model
 
+Y indicates if this person have heart disease.
+pi is the probability of having heart disease.
+p/1-p is the odds ratio.
+X1 - X7 is .....
+$$Y_i\sim Bernuolli(p_i)$$
+
+$$log(\frac{p_i}{1-p_i})=\beta_0+X_1\beta_1+X_1\beta_1+X_1\beta_1+X_1\beta_1+X_1\beta_1+X_1\beta_1+X_1\beta_1$$
+
+
+```{r}
+fit = glm(y~BMI+Smoking+AlcoholDrinking+PhysicalHealth+MentalHealth+AgeCategory+SleepTime,family = binomial, data = dat)
+```
+
+
+
+```{r}
+exp(fit$coefficients)
+```
+
+```{r}
+summary(fit)
+```
 
 
 
 # Results
+
+From the table above, as age increases, we see that the coefficients for these variables becomes higher and this would mean that the people in a higher age group will be most at risk to heart disease. 
 
 # Discussion
 
