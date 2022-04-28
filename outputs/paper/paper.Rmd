@@ -55,7 +55,11 @@ dat=dat %>%
 dat=dat %>%
   mutate(smoke = ifelse(Smoking == "No",0,1))
 
-fit = glm(y~BMI+Smoking+AlcoholDrinking+PhysicalHealth+MentalHealth+AgeCategory+SleepTime,family = binomial, data = dat)
+train_row = sample(nrow(dat), nrow(dat)*.8)
+train<-dat[train_row,]
+test<-dat[-train_row,]
+
+fit = glm(y~BMI+Smoking+AlcoholDrinking+PhysicalHealth+MentalHealth+AgeCategory+SleepTime,family = binomial, data = train)
 ```
 
 
@@ -89,6 +93,8 @@ knitr::kable(ta,digits = 5)
 ```
 From the table above, as age increases, we see that the coefficients for these variables becomes higher and this would mean that the people in a higher age group will be most at risk to heart disease. The significant factor (P-value) is low in younger age groups and suddenly increase in older age groups which tells us that while people are getting older, aging becomes more related to heart diseases.
 
+After using my model to make a prediction of my test data. By comparing the observations to the prediction, the measured accuracy is about 0.9126784, which indicates that my model is well-justified and it is able to correctly identify if the person have heart disease.
+
 # Discussion
 
 ## First discussion point
@@ -99,6 +105,8 @@ From the table above, as age increases, we see that the coefficients for these v
 ## Third discussion point
 
 ## Weaknesses and next steps
+
+There are might be more covariates can be used to predict the response variable (i.e., HeartDisease). If I can find more related covariates, the accuracy of the model should be able to increase. Therefore, I can use (?method) before I build the model to find more related covariates next time, 
 
 \newpage
 
@@ -126,8 +134,11 @@ summary(fit)
 ```{r}
 set.seed(3080)
 
-prob <- fit %>% predict(dat, type = "response")
+prob <- fit %>% predict(test, type = "response")
 head(prob)
+
+predicted <- ifelse(prob > 0.5, "Yes", "No")
+mean(predicted == test$HeartDisease)
 ```
 
 
