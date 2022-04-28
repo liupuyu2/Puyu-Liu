@@ -16,7 +16,6 @@ bibliography: references.bib
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
-library(readxl)
 library(knitr)
 library(janitor)
 library(dplyr)
@@ -36,7 +35,7 @@ In this paper we discuss the key indicators of heart disease from BMI, smoking, 
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # Read the data
-dat <- read_csv("/cloud/project/inputs/data/heart_2020_cleaned.csv")
+dat <- read_csv("../../inputs/data/heart_2020_cleaned.csv")
 ```
 
 ```{r}
@@ -66,10 +65,11 @@ dat=dat %>%
 
 # Model
 
+We include 7 independent variables in our model. X1 is BMI, which is the Body Mass Index. It is calculated by dividing a person's weight in kg by his height in meters. X2 represents whether a person smokes, which is obtained by surveys. X3 stands for whether a person drink alcohol. X4 is Mental health, research found that it is closely related to several kidns of heart diseases. Sleep time is also included in this model. Age category is a dummy variable which consists of 12 different adult age categories.
 Y indicates if this person have heart disease.
 pi is the probability of having heart disease.
 p/1-p is the odds ratio.
-X1 - X7 is .....
+
 $$Y_i\sim Bernuolli(p_i)$$
 
 $$log(\frac{p_i}{1-p_i})=\beta_0+X_1\beta_1+X_1\beta_1+X_1\beta_1+X_1\beta_1+X_1\beta_1+X_1\beta_1+X_1\beta_1$$
