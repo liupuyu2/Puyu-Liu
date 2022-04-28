@@ -23,26 +23,21 @@ library(dplyr)
 
 # Introduction
 
-As heart diseases have caused most deaths for people in the US, this dataset include about 20 variables that involve several risk factors of heart disease. Around half of all americans have at least one heart disease indicator: blood pressure, high cholesterol, smoking, alcohol drinking, diabete and obesity (high BMI), physical and mental health. Hopefully we can derive a regression analysis to use the logistic regression model to make future predictions for population with heart disease risk factors. Computational developments have a great effect on detecting the early stage of some typical heart diseases.
+As heart diseases have caused most deaths for people in the US, this dataset include about 20 variables that involve several risk factors of heart disease. Around half of all Americans have at least one heart disease indicator: blood pressure, high cholesterol, smoking, alcohol drinking, diabetes and obesity (high BMI), physical and mental health. Hopefully we can derive a regression analysis to use the logistic regression model to make future predictions for population with heart disease risk factors. Computational developments have a great effect on detecting the early stage of some typical heart diseases.
 
-The paper starts with an overview of the data with 300 thousands observations. And also, we will look into the correlation of every variable then try to conduct a regression analysis. Before that, the dataset should be properly cleaned and outliers and leverage should be well taken care of. After processing the data, we will be using the ANOVA test to determine our variables in our model.
+We used the programming language R [@citeR].The paper starts with an overview of the data with 300 thousands observations. And also, we will look into the correlation of every variable then try to conduct a regression analysis. Before that, the data should be properly cleaned and outliers and leverage should be well taken care of. After processing the data, we will be using the ANOVA test to determine our variables in our model.
 
 
 
 # Data
-In this paper we discuss the key indicators of heart disease from BMI, smoking, and other categorical variables. The data set that we used is provided by the CDC whom surveyed by telephone to gather data from residents across the US and I retrieved the organized data set from the Kaggle website. The dataset that we used surveys 400,000 adults whom are asked a series of questions related to their health status, for example "Have you smoked more than 100 cigarettes in your life?" etc. Many variables were documented by the CDC but only relevant variables related to increasing a risk of heart disease were used and cleaned up within our data set. After cleaning, only roughly 320,000 observations were noted and had relevancy towards directly or indirectly influencing heart disease. 
+In this paper we discuss the key indicators of heart disease from BMI, smoking, and other categorical variables. The data set [@citeDataset]that we used is provided by the CDC [@citeCDC] whom surveyed by telephone to gather data from residents across the US and I retrieved the organized data set from the Kaggle website. The dataset that we used surveys 400,000 adults whom are asked a series of questions related to their health status, for example "Have you smoked more than 100 cigarettes in your life?" etc. Many variables were documented by the CDC but only relevant variables related to increasing a risk of heart disease were used and cleaned up within our data set. After cleaning, only roughly 320,000 observations were noted and had relevancy towards directly or indirectly influencing heart disease. 
+
+The packages we used include knitr [@citeknitr], janitor [@citejanitor], dplyr [@citedplyr] and tidyverse [@citetidyverse]
 
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # Read the data
 dat <- read_csv("../../inputs/data/heart_2020_cleaned.csv")
-```
-
-```{r}
-summary(dat)
-```
-
-```{r}
 dat=dat %>%
   mutate(y = ifelse(HeartDisease == "No",0,1))
 dat=dat %>%
@@ -59,41 +54,40 @@ dat=dat %>%
   mutate(physic = ifelse(PhysicalActivity == "No",0,1))
 dat=dat %>%
   mutate(smoke = ifelse(Smoking == "No",0,1))
+
+fit = glm(y~BMI+Smoking+AlcoholDrinking+PhysicalHealth+MentalHealth+AgeCategory+SleepTime,family = binomial, data = dat)
 ```
+
+
 
 
 
 # Model
 
-We include 7 independent variables in our model. X1 is BMI, which is the Body Mass Index. It is calculated by dividing a person's weight in kg by his height in meters. X2 represents whether a person smokes, which is obtained by surveys. X3 stands for whether a person drink alcohol. X4 is Mental health, research found that it is closely related to several kidns of heart diseases. Sleep time is also included in this model. Age category is a dummy variable which consists of 12 different adult age categories.
-Y indicates if this person have heart disease.
-pi is the probability of having heart disease.
-p/1-p is the odds ratio.
+
+Y indicates if this person have heart disease. It follows Bernoulli Distribution with the probability $p_i$. pi is the probability of having heart disease.
+p/1-p is the odds ratio, which is the probability of getting heart disease over the probability of not getting heart disease, and so the $\log\frac{p_i}{1-p_i}$ is the log odds ratio. We include 7 independent variables in our model. X1 is BMI, which is the Body Mass Index. It is calculated by dividing a person's weight in kg by his height in meters. X2 represents whether a person smokes, which is obtained by surveys. X3 stands for whether a person drink alcohol. X4 is Mental health, research found that it is closely related to several kinds of heart diseases. Sleep time is also included in this model. Age category is a dummy variable which consists of 12 different adult age categories.
 
 $$Y_i\sim Bernuolli(p_i)$$
 
 $$log(\frac{p_i}{1-p_i})=\beta_0+X_1\beta_1+X_1\beta_1+X_1\beta_1+X_1\beta_1+X_1\beta_1+X_1\beta_1+X_1\beta_1$$
 
 
-```{r}
-fit = glm(y~BMI+Smoking+AlcoholDrinking+PhysicalHealth+MentalHealth+AgeCategory+SleepTime,family = binomial, data = dat)
-```
-
-
-
-```{r}
-exp(fit$coefficients)
-```
-
-```{r}
-summary(fit)
-```
 
 
 
 # Results
 
-From the table above, as age increases, we see that the coefficients for these variables becomes higher and this would mean that the people in a higher age group will be most at risk to heart disease. 
+
+```{r}
+estimate=fit$coefficients
+p = summary(fit)$coefficients[,4] 
+ta=cbind(estimate,p)
+colnames(ta) = c("Estimate","p-value")
+knitr::kable(ta,digits = 5)
+
+```
+From the table above, as age increases, we see that the coefficients for these variables becomes higher and this would mean that the people in a higher age group will be most at risk to heart disease. The significant factor (P-value) is low in younger age groups and suddenly increase in older age groups which tells us that while people are getting older, aging becomes more related to heart diseases.
 
 # Discussion
 
@@ -106,8 +100,6 @@ From the table above, as age increases, we see that the coefficients for these v
 
 ## Weaknesses and next steps
 
-
-
 \newpage
 
 \appendix
@@ -115,7 +107,32 @@ From the table above, as age increases, we see that the coefficients for these v
 # Appendix {-}
 
 
-# Additional details
+
+```{r}
+
+fit
+```
+
+
+
+```{r}
+exp(fit$coefficients)
+```
+
+```{r}
+summary(fit)
+```
+
+```{r}
+set.seed(3080)
+
+prob <- fit %>% predict(dat, type = "response")
+head(prob)
+```
+
+
+
+
 
 
 \newpage
